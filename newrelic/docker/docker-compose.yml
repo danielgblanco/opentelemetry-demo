@@ -43,7 +43,7 @@ services:
     logging: *logging
   # AdService
   ad:
-    image: ${IMAGE_NAME}:${DEMO_VERSION}-ad
+#    image: ${IMAGE_NAME}:${DEMO_VERSION}-ad
     container_name: ad
     build:
       context: ./
@@ -63,11 +63,12 @@ services:
       - AD_PORT
       - FLAGD_HOST
       - FLAGD_PORT
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
-      - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
-      - OTEL_LOGS_EXPORTER=otlp
-      - OTEL_SERVICE_NAME=ad
+#      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
+#      - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+#      - OTEL_RESOURCE_ATTRIBUTES
+#      - OTEL_LOGS_EXPORTER=otlp
+#      - OTEL_SERVICE_NAME=ad
+      - OTEL_JAVA_GLOBAL_AUTOCONFIGURE_ENABLED=true
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
       - _JAVA_OPTIONS
     depends_on:
@@ -617,7 +618,7 @@ services:
       - ${SRC_DIR}/flagd:/app/data
   # Kafka used by Checkout, Accounting, and Fraud Detection services
   kafka:
-    image: ${IMAGE_NAME}:${DEMO_VERSION}-kafka
+#    image: ${IMAGE_NAME}:${DEMO_VERSION}-kafka
     container_name: kafka
     build:
       context: ./
@@ -674,9 +675,9 @@ services:
     volumes:
       - ${HOST_FILESYSTEM}:/hostfs:ro
       - ${DOCKER_SOCK}:/var/run/docker.sock:ro
-      - ./config/otel-config-docker.yaml:/etc/otelcol-config.yml
-      - ./logs:/logs
-      - ./checkpoint:/checkpoint
+      - ./newrelic/docker/config/otel-config-docker.yaml:/etc/otelcol-config.yml
+      - ./newrelic/docker/logs:/logs
+      - ./newrelic/docker/checkpoint:/checkpoint
     ports:
       - "${OTEL_COLLECTOR_PORT_GRPC}"
       - "${OTEL_COLLECTOR_PORT_HTTP}"
