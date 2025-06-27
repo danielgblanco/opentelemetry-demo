@@ -151,28 +151,28 @@ public final class AdService {
       AdService service = AdService.getInstance();
 
       // get the current span in context
-      Span span = Span.current();
+//      Span span = Span.current();
       try {
         List<Ad> allAds = new ArrayList<>();
         AdRequestType adRequestType;
         AdResponseType adResponseType;
 
-        Baggage baggage = Baggage.fromContextOrNull(Context.current());
+//        Baggage baggage = Baggage.fromContextOrNull(Context.current());
         MutableContext evaluationContext = new MutableContext();
-        if (baggage != null) {
-          final String sessionId = baggage.getEntryValue("session.id");
-          span.setAttribute("session.id", sessionId);
-          evaluationContext.setTargetingKey(sessionId);
-          evaluationContext.add("session", sessionId);
-        } else {
-          logger.info("no baggage found in context");
-        }
+//        if (baggage != null) {
+//          final String sessionId = baggage.getEntryValue("session.id");
+//          span.setAttribute("session.id", sessionId);
+//          evaluationContext.setTargetingKey(sessionId);
+//          evaluationContext.add("session", sessionId);
+//        } else {
+//          logger.info("no baggage found in context");
+//        }
 
         CPULoad cpuload = CPULoad.getInstance();
         cpuload.execute(ffClient.getBooleanValue(AD_HIGH_CPU_FEATURE_FLAG, false, evaluationContext));
 
-        span.setAttribute("app.ads.contextKeys", req.getContextKeysList().toString());
-        span.setAttribute("app.ads.contextKeys.count", req.getContextKeysCount());
+//        span.setAttribute("app.ads.contextKeys", req.getContextKeysList().toString());
+//        span.setAttribute("app.ads.contextKeys.count", req.getContextKeysCount());
         if (req.getContextKeysCount() > 0) {
           logger.info("Targeted ad request received for " + req.getContextKeysList());
           for (int i = 0; i < req.getContextKeysCount(); i++) {
@@ -192,9 +192,9 @@ public final class AdService {
           allAds = service.getRandomAds();
           adResponseType = AdResponseType.RANDOM;
         }
-        span.setAttribute("app.ads.count", allAds.size());
-        span.setAttribute("app.ads.ad_request_type", adRequestType.name());
-        span.setAttribute("app.ads.ad_response_type", adResponseType.name());
+//        span.setAttribute("app.ads.count", allAds.size());
+//        span.setAttribute("app.ads.ad_request_type", adRequestType.name());
+//        span.setAttribute("app.ads.ad_response_type", adResponseType.name());
 
         adRequestsCounter.add(
             1,
@@ -216,9 +216,9 @@ public final class AdService {
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
       } catch (StatusRuntimeException e) {
-        span.addEvent(
-            "Error", Attributes.of(AttributeKey.stringKey("exception.message"), e.getMessage()));
-        span.setStatus(StatusCode.ERROR);
+//        span.addEvent(
+//            "Error", Attributes.of(AttributeKey.stringKey("exception.message"), e.getMessage()));
+//        span.setStatus(StatusCode.ERROR);
         logger.log(Level.WARN, "GetAds Failed with status {}", e.getStatus());
         responseObserver.onError(e);
       }
