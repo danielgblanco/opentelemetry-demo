@@ -56,8 +56,6 @@ dependencies {
                 "dev.openfeature.contrib.providers:flagd:0.11.5",
                 'dev.openfeature:sdk:1.14.1'
 
-
-
         runtimeOnly "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}",
                 "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
                 "io.netty:netty-tcnative-boringssl-static:2.0.70.Final"
