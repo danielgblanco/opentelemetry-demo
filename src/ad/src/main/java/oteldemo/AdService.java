@@ -157,16 +157,16 @@ public final class AdService {
         AdRequestType adRequestType;
         AdResponseType adResponseType;
 
-//        Baggage baggage = Baggage.fromContextOrNull(Context.current());
+        Baggage baggage = Baggage.fromContextOrNull(Context.current());
         MutableContext evaluationContext = new MutableContext();
-//        if (baggage != null) {
-//          final String sessionId = baggage.getEntryValue("session.id");
+        if (baggage != null) {
+          final String sessionId = baggage.getEntryValue("session.id");
 //          span.setAttribute("session.id", sessionId);
-//          evaluationContext.setTargetingKey(sessionId);
-//          evaluationContext.add("session", sessionId);
-//        } else {
-//          logger.info("no baggage found in context");
-//        }
+          evaluationContext.setTargetingKey(sessionId);
+          evaluationContext.add("session", sessionId);
+        } else {
+          logger.info("no baggage found in context");
+        }
 
         CPULoad cpuload = CPULoad.getInstance();
         cpuload.execute(ffClient.getBooleanValue(AD_HIGH_CPU_FEATURE_FLAG, false, evaluationContext));
@@ -230,7 +230,7 @@ public final class AdService {
   @WithSpan("getAdsByCategory")
   private Collection<Ad> getAdsByCategory(@SpanAttribute("app.ads.category") String category) {
     Collection<Ad> ads = adsMap.get(category);
-    Span.current().setAttribute("app.ads.count", ads.size());
+//    Span.current().setAttribute("app.ads.count", ads.size());
     return ads;
   }
 
